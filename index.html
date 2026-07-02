@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>16 Arena - Invoice</title>
+    <!-- Modern Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --card-bg: #ffffff;
+            --primary: #FE8321;
+            --primary-glow: rgba(254, 131, 33, 0.15);
+            --text-dark: #111111;
+            --text-muted: #555555;
+            --text-light: #888888;
+            --savings-green: #00C264;
+            --border-color: #eeeeee;
+            --section-bg: #fafafa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            line-height: 1.5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px 20px 40px 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Container & Animations */
+        .invoice-container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 0 24px 40px 24px;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Top Logo Banner */
+        .logo-banner {
+            background: linear-gradient(135deg, #E2EDE5 0%, #F5EEE6 100%);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 32px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-banner:hover {
+            transform: scale(1.01);
+        }
+
+        .logo-banner img {
+            height: 80px;
+            object-fit: contain;
+        }
+
+        /* Metadata Details */
+        .meta-details {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .meta-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .meta-label {
+            font-weight: 500;
+        }
+
+        .meta-value {
+            color: var(--text-dark);
+            font-family: monospace;
+            font-size: 13px;
+        }
+
+        /* Copy Button Icon */
+        .copy-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .copy-btn:hover {
+            color: var(--primary);
+            background-color: var(--primary-glow);
+        }
+
+        .copy-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Tooltip style */
+        .tooltip {
+            position: absolute;
+            background: #222;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-4px);
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .copy-btn.copied .tooltip {
+            opacity: 1;
+        }
+
+        /* Greeting & Greeting Text */
+        .greeting-section {
+            margin-bottom: 28px;
+        }
+
+        .greeting-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .greeting-text {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 28px 0;
+        }
+
+        /* Section Heading */
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+        }
+
+        /* Table details */
+        .item-details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 8px;
+        }
+
+        .item-details-table th, 
+        .item-details-table td {
+            text-align: left;
+            padding: 8px 0;
+            font-size: 13px;
+        }
+
+        .item-details-table th {
+            color: var(--text-light);
+            font-weight: 500;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .item-details-table td {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .item-details-table th.col-num, 
+        .item-details-table td.col-num {
+            text-align: right;
+            width: 60px;
+        }
+
+        /* Bill Details Block */
+        .bill-block {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .bill-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .bill-row.total {
+            font-size: 15px;
+            color: var(--text-dark);
+            font-weight: 700;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 16px;
+            margin-top: 4px;
+        }
+
+        .bill-row.green {
+            color: var(--savings-green);
+            font-weight: 500;
+        }
+
+        .bill-val {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .bill-row.total .bill-val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            color: var(--text-dark);
+        }
+
+        .bill-row.green .bill-val {
+            color: var(--savings-green);
+        }
+
+        /* Legal & Corporate Info */
+        .corp-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .corp-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .corp-title img {
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .platform-fee {
+            font-size: 11px;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        /* Terms and conditions */
+        .terms-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .terms-item {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .terms-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .terms-icon svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Actions and Print Button */
+        .actions-section {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .download-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px var(--primary-glow);
+            transition: all 0.2s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(254, 131, 33, 0.3);
+        }
+
+        .download-btn:active {
+            transform: translateY(1px);
+        }
+
+        .print-btn {
+            background-color: transparent;
+            color: var(--text-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .print-btn:hover {
+            background-color: #fafafa;
+            border-color: #dcdcdc;
+            transform: translateY(-1px);
+        }
+
+        .print-btn:active {
+            transform: translateY(1px);
+        }
+
+        .download-btn svg, .print-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Skeleton Shimmer Loading States */
+        .shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #f7f7f7 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading-shimmer 1.5s infinite;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        @keyframes loading-shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .skeleton-block {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .skeleton-line {
+            height: 14px;
+            width: 100%;
+        }
+
+        .skeleton-line.short {
+            width: 60%;
+        }
+
+        .skeleton-line.medium {
+            width: 80%;
+        }
+
+        /* Error state */
+        .error-card {
+            text-align: center;
+            padding: 24px 0;
+        }
+
+        .error-icon {
+            color: #ff3b30;
+            margin-bottom: 12px;
+        }
+
+        .error-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .error-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .retry-btn {
+            background-color: var(--text-dark);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Print Media CSS Overrides */
+        @media print {
+            @page {
+                margin: 10mm 15mm;
+            }
+
+            body {
+                background-color: white;
+                padding: 0;
+                margin: 0;
+                color: black;
+            }
+
+            .invoice-container {
+                box-shadow: none;
+                border: none;
+                padding: 0 16px;
+                max-width: 100%;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            /* Compress vertical space to fit on a single page */
+            .logo-banner {
+                padding: 14px 20px !important;
+                margin-bottom: 18px !important;
+                border-radius: 12px !important;
+            }
+
+            .logo-banner img {
+                height: 52px !important;
+            }
+
+            .meta-details {
+                margin-bottom: 16px !important;
+                gap: 2px !important;
+                font-size: 13px !important;
+            }
+
+            .greeting-section {
+                margin-bottom: 16px !important;
+            }
+
+            .greeting-section h2 {
+                font-size: 18px !important;
+                margin-bottom: 4px !important;
+            }
+
+            .greeting-section p {
+                font-size: 13px !important;
+            }
+
+            .section-title {
+                margin-bottom: 6px !important;
+                font-size: 13px !important;
+            }
+
+            .item-details-table th, .item-details-table td {
+                padding: 8px 10px !important;
+                font-size: 13px !important;
+            }
+
+            .bill-block {
+                margin-top: 14px !important;
+                padding: 14px !important;
+                border-radius: 12px !important;
+            }
+
+            .bill-row {
+                margin-bottom: 6px !important;
+                font-size: 13px !important;
+            }
+
+            .bill-row.total-row {
+                margin-top: 8px !important;
+                padding-top: 8px !important;
+            }
+
+            .footer-block {
+                margin-top: 16px !important;
+                margin-bottom: 16px !important;
+            }
+
+            .footer-block p {
+                font-size: 11px !important;
+            }
+
+            .terms-list {
+                gap: 4px !important;
+            }
+
+            .terms-item {
+                font-size: 11px !important;
+            }
+
+            .download-btn, .print-btn, .copy-btn, .actions-section {
+                display: none !important;
+            }
+        }
+
+        /* Mobile adaptation */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+                background-color: var(--card-bg);
+            }
+
+            .invoice-container {
+                padding: 16px;
+                border: none;
+                box-shadow: none;
+            }
+
+            .logo-banner {
+                margin-bottom: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="invoice-container" id="invoiceContainer">
+        <!-- Skeleton Loader Screen -->
+        <div id="loaderState" class="skeleton-block">
+            <div class="logo-banner shimmer" style="height: 96px; width: 100%;"></div>
+            <div class="skeleton-line shimmer short" style="height: 18px;"></div>
+            <div class="skeleton-line shimmer" style="height: 12px;"></div>
+            <div class="skeleton-line shimmer medium" style="height: 12px;"></div>
+            <div class="skeleton-line shimmer short" style="height: 12px;"></div>
+            <div class="divider"></div>
+            <div class="skeleton-line shimmer short" style="height: 18px;"></div>
+            <div class="skeleton-line shimmer" style="height: 40px; margin-top: 10px;"></div>
+            <div class="divider"></div>
+            <div class="skeleton-line shimmer short" style="height: 18px;"></div>
+            <div class="skeleton-line shimmer" style="height: 60px; margin-top: 10px;"></div>
+        </div>
+
+        <!-- Populated Invoice State (Initially Hidden) -->
+        <div id="invoiceState" style="display: none;">
+            <div class="logo-banner">
+                <img src="dark_logo.svg" alt="16 Arena Logo">
+            </div>
+
+            <div class="meta-details">
+                <div class="meta-row">
+                    <span id="invoiceDate" class="meta-value">-</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Order no.</span>
+                    <span id="orderIdVal" class="meta-value">-</span>
+                    <button class="copy-btn" onclick="copyText('orderIdVal', this)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        <span class="tooltip">Copy</span>
+                    </button>
+                </div>
+                <div class="meta-row" id="paymentRow" style="display: none;">
+                    <span class="meta-label">Payment id.</span>
+                    <span id="paymentIdVal" class="meta-value">-</span>
+                    <button class="copy-btn" onclick="copyText('paymentIdVal', this)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        <span class="tooltip">Copy</span>
+                    </button>
+                </div>
+                <div class="meta-row" id="phoneRow" style="display: none;">
+                    <span class="meta-label">Phone:</span>
+                    <span id="phoneVal" class="meta-value" style="font-family: inherit;">-</span>
+                </div>
+                <div class="meta-row" id="emailRow" style="display: none;">
+                    <span class="meta-label">Email:</span>
+                    <span id="emailVal" class="meta-value" style="font-family: inherit;">-</span>
+                </div>
+            </div>
+
+            <div class="greeting-section">
+                <div class="greeting-title" id="greetingName">Hi Arena Player,</div>
+                <div class="greeting-text" id="greetingSummary">Thanks for purchasing item from 16 Arena</div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="section-title">Item details</div>
+            <table class="item-details-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th class="col-num">No.</th>
+                    </tr>
+                </thead>
+                <tbody id="itemsTableBody">
+                    <!-- Hydrated items -->
+                </tbody>
+            </table>
+
+            <div class="divider"></div>
+
+            <div class="section-title">Bill details</div>
+            <div class="bill-block">
+                <div class="bill-row">
+                    <span>Brand card worth</span>
+                    <span id="subtotalVal" class="bill-val">-</span>
+                </div> 
+                <div class="bill-row green" id="coinsDiscountRow" style="display: none;">
+                    <span>Arena Coins Discount</span>
+                    <span id="coinsDiscountVal" class="bill-val">-</span>
+                </div>
+                <div class="bill-row green" id="couponDiscountRow" style="display: none;">
+                    <span>Coupon Discount</span>
+                    <span id="couponDiscountVal" class="bill-val">-</span>
+                </div>
+                <div class="bill-row green" id="walletUsedRow" style="display: none;">
+                    <span>Wallet Credits Used</span>
+                    <span id="walletUsedVal" class="bill-val">-</span>
+                </div>
+                <div class="bill-row total">
+                    <span>You Paid</span>
+                    <span id="totalPaidVal" class="bill-val">-</span>
+                </div>
+                <div class="bill-row" id="paymentMethodRow" style="font-size: 12px; margin-top: -6px; justify-content: flex-end;">
+                    <span id="paymentMethodVal">Via UPI</span>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="corp-info">
+                <div class="corp-title">
+                    <img src="dark_logo.svg" alt="16 Arena Logo Small">
+                    <span>16 Arena Private Limited</span>
+                </div>
+                <div>Hustle Hub 1709, 19th Main, Sector 4, HSR Layout, Bengaluru, Karnataka - 560102.</div>
+                <div class="platform-fee">The above value includes 0% platform fee</div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="section-title" style="margin-bottom: 12px;">Terms & Conditions</div>
+            <ul class="terms-list">
+                <li class="terms-item">
+                    <span class="terms-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                    <span>Vouchers are subject to their respective brand validity (typically 6 to 12 months) and are redeemable multiple times up to the balance limit.</span>
+                </li>
+                <li class="terms-item">
+                    <span class="terms-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                    <span>Once purchased, voucher codes cannot be cancelled, returned, or refunded under any circumstances.</span>
+                </li>
+                <li class="terms-item">
+                    <span class="terms-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                    <span>Any specific brand discounts, wallet updates, or pre-order combos on merchant applications are subject to merchant-specific terms.</span>
+                </li>
+            </ul>
+
+            <div class="actions-section">
+                <button class="download-btn" onclick="window.print()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Download PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- Error Card Screen (Initially Hidden) -->
+        <div id="errorState" class="error-card" style="display: none;">
+            <div class="error-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            </div>
+            <div class="error-title">Unable to Load Invoice</div>
+            <div class="error-desc" id="errorMessage">The session might have expired or the order ID is invalid. Please try opening the invoice from the mobile app again.</div>
+            <button class="retry-btn" onclick="fetchInvoice()">Retry</button>
+        </div>
+    </div>
+
+    <script>
+        // Formatter Helpers
+        function formatInr(val) {
+            return new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                maximumFractionDigits: 2
+            }).format(val);
+        }
+
+        function formatDate(isoString) {
+            try {
+                const date = new Date(isoString);
+                const options = { 
+                    day: '2-digit', 
+                    month: '2-digit', 
+                    year: 'numeric', 
+                    hour: '2-digit', 
+                    minute: '2-digit', 
+                    second: '2-digit',
+                    hour12: true 
+                };
+                return date.toLocaleString('en-IN', options).replace(',', '');
+            } catch (e) {
+                return isoString;
+            }
+        }
+
+        function paymentMethodLabel(method) {
+            if (!method) return 'UPI';
+            const norm = method.toLowerCase();
+            if (norm.includes('phonepe')) return 'PhonePe UPI';
+            if (norm.includes('upi')) return 'UPI';
+            if (norm.includes('razorpay')) return 'UPI';
+            if (norm.includes('wallet')) return 'Wallet';
+            return method.toUpperCase();
+        }
+
+        // Copy Clipboard helper
+        function copyText(elementId, btn) {
+            const val = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(val).then(() => {
+                btn.classList.add('copied');
+                const tooltip = btn.querySelector('.tooltip');
+                tooltip.innerText = 'Copied!';
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    tooltip.innerText = 'Copy';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy token: ', err);
+            });
+        }
+
+        // Mock rendering for local preview
+        function renderMockInvoice() {
+            const loader = document.getElementById('loaderState');
+            const content = document.getElementById('invoiceState');
+
+            document.getElementById('invoiceDate').innerText = '28/02/2025 9:26:56 pm';
+            document.getElementById('orderIdVal').innerText = '01JN6MCVNJAHS94GFESSPDFS19';
+            document.getElementById('paymentRow').style.display = 'flex';
+            document.getElementById('paymentIdVal').innerText = 'OMD2502282126597951937743';
+            
+            document.getElementById('phoneRow').style.display = 'flex';
+            document.getElementById('phoneVal').innerText = '+91 77789 51179';
+            document.getElementById('emailRow').style.display = 'flex';
+            document.getElementById('emailVal').innerText = 'dhrup9514@gmail.com';
+
+            document.getElementById('greetingName').innerText = 'Hi Dhruv Patel,';
+            document.getElementById('greetingSummary').innerText = 'Thanks for purchasing BGMI 325 UC worth ' + formatInr(380.00) + ' from 16 Arena';
+
+            // Subtotal
+            document.getElementById('subtotalVal').innerText = formatInr(380.00);
+            
+            // Discounts
+            document.getElementById('coinsDiscountRow').style.display = 'flex';
+            document.getElementById('coinsDiscountVal').innerText = `- ${formatInr(38.00)}`;
+            
+            document.getElementById('couponDiscountRow').style.display = 'flex';
+            document.getElementById('couponDiscountRow').firstElementChild.innerText = 'Coupon Discount (WELCOME10)';
+            document.getElementById('couponDiscountVal').innerText = `- ${formatInr(10.00)}`;
+
+            document.getElementById('totalPaidVal').innerText = formatInr(332.00);
+            document.getElementById('paymentMethodVal').innerText = 'Via PhonePe UPI (' + formatInr(332.00) + ')';
+
+            // Items list
+            const itemsBody = document.getElementById('itemsTableBody');
+            itemsBody.innerHTML = '';
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>₹380.00 BGMI 325 UC Brand Card</td>
+                <td class="col-num">x 1</td>
+            `;
+            itemsBody.appendChild(tr);
+
+            loader.style.display = 'none';
+            content.style.display = 'block';
+        }
+
+        // Fetch & render
+        async function fetchInvoice() {
+            // DOM states
+            const loader = document.getElementById('loaderState');
+            const content = document.getElementById('invoiceState');
+            const errorCard = document.getElementById('errorState');
+
+            loader.style.display = 'flex';
+            content.style.display = 'none';
+            errorCard.style.display = 'none';
+
+            // Get parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const invoiceId = urlParams.get('id');
+            const token = urlParams.get('token');
+            const isPreview = urlParams.get('preview') === 'true' || (window.location.protocol === 'file:' && !invoiceId);
+
+            if (isPreview) {
+                renderMockInvoice();
+                return;
+            }
+
+            // Find API URL
+            // Default to localhost/dev or fallback to prod api based on hostname
+            let apiBase = 'https://api.16arena.com';
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname.startsWith('192.168.')) {
+                apiBase = 'http://192.168.29.71:5006'; // Dev API server
+            }
+
+            if (!invoiceId) {
+                loader.style.display = 'none';
+                errorCard.style.display = 'block';
+                document.getElementById('errorMessage').innerText = 'Invoice ID is missing in the request.';
+                return;
+            }
+
+            try {
+                // Fetch Order Invoice details
+                const headers = {};
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+                const orderResponse = await fetch(`${apiBase}/api/v1/shop/orders/${invoiceId}/invoice`, { headers });
+                
+                if (!orderResponse.ok) {
+                    throw new Error(`Failed to load invoice details (Status: ${orderResponse.status})`);
+                }
+
+                const responseData = await orderResponse.json();
+                const order = responseData.data;
+
+                if (!order) {
+                    throw new Error('Order data is empty.');
+                }
+
+                // Render basic metadata info
+                document.getElementById('invoiceDate').innerText = formatDate(order.transactedAt);
+                document.getElementById('orderIdVal').innerText = order.id;
+
+                // Set transaction/payment ID if present
+                const transactionId = order.providerPaymentId || order.orderNumber || order.id;
+                if (transactionId) {
+                    document.getElementById('paymentRow').style.display = 'flex';
+                    document.getElementById('paymentIdVal').innerText = transactionId;
+                } else {
+                    document.getElementById('paymentRow').style.display = 'none';
+                }
+
+                // Customer Info directly from the invoice payload
+                if (order.userPhone) {
+                    document.getElementById('phoneRow').style.display = 'flex';
+                    document.getElementById('phoneVal').innerText = order.userPhone;
+                } else {
+                    document.getElementById('phoneRow').style.display = 'none';
+                }
+
+                if (order.userEmail) {
+                    document.getElementById('emailRow').style.display = 'flex';
+                    document.getElementById('emailVal').innerText = order.userEmail;
+                } else {
+                    document.getElementById('emailRow').style.display = 'none';
+                }
+
+                // Greeting section
+                const customerName = order.userName || 'Arena Player';
+                document.getElementById('greetingName').innerText = `Hi ${customerName},`;
+                
+                const brandDisplayName = order.brandName || (order.products && order.products.length > 0 ? (order.products[0].skuLabel || order.products[0].productName) : 'item');
+                document.getElementById('greetingSummary').innerText = `Thanks for purchasing ${brandDisplayName} worth ${formatInr(order.amount)} from 16 Arena`;
+
+                // Subtotal & bill items
+                document.getElementById('subtotalVal').innerText = formatInr(order.amount);
+                document.getElementById('totalPaidVal').innerText = formatInr(order.paidAmount);
+                
+                const methodLabel = paymentMethodLabel(order.paymentMethod);
+                document.getElementById('paymentMethodVal').innerText = `Via ${methodLabel} (${formatInr(order.paidAmount)})`;
+
+                // Discounts mapping
+                if (order.coinsDiscount > 0) {
+                    document.getElementById('coinsDiscountRow').style.display = 'flex';
+                    document.getElementById('coinsDiscountVal').innerText = `- ${formatInr(order.coinsDiscount)}`;
+                } else {
+                    document.getElementById('coinsDiscountRow').style.display = 'none';
+                }
+                
+                if (order.couponDiscount > 0) {
+                    document.getElementById('couponDiscountRow').style.display = 'flex';
+                    const couponLabel = order.couponCode ? `Coupon (${order.couponCode})` : 'Coupon Discount';
+                    document.getElementById('couponDiscountRow').firstElementChild.innerText = couponLabel;
+                    document.getElementById('couponDiscountVal').innerText = `- ${formatInr(order.couponDiscount)}`;
+                } else {
+                    document.getElementById('couponDiscountRow').style.display = 'none';
+                }
+                
+                if (order.walletDiscount > 0) {
+                    document.getElementById('walletUsedRow').style.display = 'flex';
+                    document.getElementById('walletUsedVal').innerText = `- ${formatInr(order.walletDiscount)}`;
+                } else {
+                    document.getElementById('walletUsedRow').style.display = 'none';
+                }
+
+                // Items list mapping
+                const itemsBody = document.getElementById('itemsTableBody');
+                itemsBody.innerHTML = '';
+                
+                if (order.products && order.products.length > 0) {
+                    order.products.forEach(item => {
+                        const tr = document.createElement('tr');
+                        const label = item.skuLabel || item.productName || 'Gift Card';
+                        tr.innerHTML = `
+                            <td>${formatInr(item.unitPrice)} ${label}</td>
+                            <td class="col-num">x ${item.quantity}</td>
+                        `;
+                        itemsBody.appendChild(tr);
+                    });
+                }
+
+                // Dynamic Terms & Conditions mapping
+                if (order.tnc && order.tnc.length > 0) {
+                    const termsList = document.querySelector('.terms-list');
+                    if (termsList) {
+                        termsList.innerHTML = '';
+                        order.tnc.forEach(term => {
+                            const li = document.createElement('li');
+                            li.className = 'terms-item';
+                            li.innerHTML = `
+                                <span class="terms-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                </span>
+                                <span>${term}</span>
+                            `;
+                            termsList.appendChild(li);
+                        });
+                    }
+                }
+
+                // Switch UI states
+                loader.style.display = 'none';
+                content.style.display = 'block';
+
+            } catch (err) {
+                console.error(err);
+                loader.style.display = 'none';
+                errorCard.style.display = 'block';
+                document.getElementById('errorMessage').innerText = err.message || 'The session might have expired or the order ID is invalid.';
+            }
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', fetchInvoice);
+    </script>
+</body>
+</html>
